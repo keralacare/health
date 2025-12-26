@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { StatusBadge, getStatusType } from "@/components/status-badge";
 import { InterpretationRow } from "@/components/interpretation-row";
 import { DisclaimerAlert } from "@/components/disclaimer-alert";
@@ -485,7 +485,9 @@ identifiers. All calculations were done on your device.
                 </Alert>
               </div>
               <DialogFooter>
-                <Button variant="outline">Cancel</Button>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
                 <Button 
                   className="bg-emerald-600 hover:bg-emerald-700 gap-2"
                   onClick={handleDownload}
