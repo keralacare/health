@@ -239,8 +239,11 @@
 
   "footer_disclaimer": "This tool provides general health information and is not a medical diagnosis.",
   "footer_consult_advice": "Always consult a healthcare professional for medical advice.",
+  "footer_developed_by": "Developed and Maintained by the People of Kerala",
+  "footer_text": "Kerala Care is developed for the community by Govt. of Kerala in collaboration with the <a href='https://contributors.ohc.network/people' target='_blank' rel='noopener noreferrer' class='underline underline-offset-2'>Open Healthcare Network</a>",
   "footer_copyright": "© {{year}} Healthy Life Campaign. All tools are free to use.",
   "footer_awareness": "This is a health awareness tool. It does not diagnose disease or prescribe treatment.",
+  "footer_resource_1": "Health and Family Welfare Department",
 
   "step1_title": "About you",
   "step1_subtitle": "This helps us tailor your risk score and tips.",

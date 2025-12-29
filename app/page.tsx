@@ -34,6 +34,7 @@ import {
 import { useAssessment } from "@/lib/assessment-context";
 import { useI18n } from "@/lib/i18n-context";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { Footer } from "@/components/footer";
 
 export default function LandingPage() {
   const { resetAssessment } = useAssessment();
@@ -484,42 +485,9 @@ export default function LandingPage() {
               {t("footer_consult_advice")}
             </p>
           </div>
-          <Separator className="my-8 bg-slate-800" />
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-sm text-center md:text-left">
-              {t("footer_copyright", {
-                year: new Date().getFullYear().toString(),
-              })}
-            </p>
-            <div className="flex items-center gap-4">
-              <Link
-                href="https://ohc.network?utm_source=healthylife&utm_medium=footer&utm_campaign=landing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-80"
-              >
-                <Image
-                  src="/ohc-logo.svg"
-                  alt="Open Healthcare Network"
-                  width={80}
-                  height={30}
-                  priority={false}
-                  className="brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </Link>
-              <Link
-                href="https://github.com/ohcnetwork/healthylife?utm_source=healthylife&utm_medium=footer&utm_campaign=landing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-slate-400 hover:text-white transition-colors"
-                aria-label="View source on GitHub"
-              >
-                <Github className="size-6" />
-              </Link>
-            </div>
-          </div>
         </div>
       </footer>
+      <Footer />
     </div>
   );
 }
