@@ -35,6 +35,7 @@ import { useAssessment } from "@/lib/assessment-context";
 import { useI18n } from "@/lib/i18n-context";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Footer } from "@/components/footer";
+import Title from "@/components/ui/title";
 
 export default function LandingPage() {
   const { resetAssessment } = useAssessment();
@@ -171,6 +172,36 @@ export default function LandingPage() {
                 <p className="text-xs text-slate-500">{stat.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="legacy-of-compassion" className="pt-20">
+        <div className="bg-white shadow-md rounded-lg max-w-6xl mx-auto my-4">
+          <div className="container mx-auto px-4 py-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex flex-col md:flex-row items-center gap-y-8 pb-4">
+                <div className="w-full md:w-1/3">
+                  <Image
+                    src="/cm-portrait.png"
+                    alt="Chief Minister"
+                    width={346}
+                    height={368}
+                  />
+                </div>
+                <div className="w-full md:w-2/3 space-y-4 md:pr-10">
+                  <Title>{t("legacy_title")}</Title>
+                  <blockquote className="text-gray-600 leading-relaxed md:pr-16">
+                    &ldquo;{t("legacy_quote")}&rdquo;
+                  </blockquote>
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <cite className="text-primary-800 font-semibold text-lg text-center md:text-left">
+                      {t("legacy_author")}
+                    </cite>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -472,7 +503,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
                 <Heart className="w-5 h-5 text-white" />
               </div>
               <span className="text-lg font-semibold text-white">

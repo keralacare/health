@@ -719,5 +719,9 @@
   "status_hypotension": "Hypotension",
   "status_stage1_hypertension": "Stage 1 Hypertension",
   "status_stage2_hypertension": "Stage 2 Hypertension",
-  "status_hypertensive_crisis": "Hypertensive Crisis"
+  "status_hypertensive_crisis": "Hypertensive Crisis",
+
+  "legacy_title": "Legacy of Compassion",
+  "legacy_quote": "A social movement should be initiated to ensure quality palliative care to all people and families requiring care irrespective of rural-urban & APL/BPL differentiation.",
+  "legacy_author": "Shri. Pinarayi Vijayan, Hon'ble Chief Minister of Kerala"
 }
