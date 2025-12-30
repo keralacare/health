@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import {
   Card,
@@ -136,9 +137,16 @@ It does not provide treatment advice.
           <Button
             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2"
             size="lg"
+            asChild
           >
-            <Building2 className="w-5 h-5" />
-            {t("advisory_consult_doctor")}
+            <Link
+              href="/tools/find-jak"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Building2 className="w-5 h-5" />
+              {t("advisory_consult_doctor")}
+            </Link>
           </Button>
 
           <div className="grid grid-cols-2 gap-3">

@@ -81,7 +81,7 @@ export default function LandingPage() {
               >
                 {t("common_assessment")}
               </Link>
-              <LanguageSwitcher />
+              <LanguageSwitcher variant="minimal" />
               <Link href="/assessment/step-1" onClick={handleStartAssessment}>
                 <Button className="bg-emerald-600 hover:bg-emerald-700">
                   {t("common_start_assessment")}
@@ -98,7 +98,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden h-[calc(100vh-4rem)] lg:h-auto">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -538,7 +538,6 @@ export default function LandingPage() {
 
       {/* Footer */}
       <Footer />
-     
     </div>
   );
 }

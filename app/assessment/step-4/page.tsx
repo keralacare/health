@@ -241,10 +241,16 @@ export default function Step4Page() {
             </AlertTitle>
             <AlertDescription className="text-amber-800">
               <div>{t("step4_consultation_description")}</div>
-              <Button className="mt-3 bg-emerald-600 hover:bg-emerald-700 gap-2 w-full">
-                <Building2 className="w-4 h-4" />
-                {t("step4_consultation_find_jak")}
-              </Button>
+              <Link
+                href="/tools/find-jak"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button className="mt-3 bg-emerald-600 hover:bg-emerald-700 gap-2 w-full">
+                  <Building2 className="w-4 h-4" />
+                  {t("step4_consultation_find_jak")}
+                </Button>
+              </Link>
             </AlertDescription>
           </Alert>
         )}

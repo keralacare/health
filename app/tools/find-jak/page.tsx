@@ -215,7 +215,7 @@ function JAKResultCard({
 
 export default function FindJAKPage() {
   const [searchMode, setSearchMode] = useState<"district" | "location">(
-    "district"
+    "location"
   );
   const [district, setDistrict] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -449,21 +449,21 @@ export default function FindJAKPage() {
               >
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger
-                    value="district"
-                    className="gap-1.5 text-xs sm:text-sm"
-                  >
-                    <Search className="w-4 h-4 shrink-0" />
-                    <span className="truncate">
-                      {t("tool_jak_search_mode_district")}
-                    </span>
-                  </TabsTrigger>
-                  <TabsTrigger
                     value="location"
                     className="gap-1.5 text-xs sm:text-sm"
                   >
                     <Navigation className="w-4 h-4 shrink-0" />
                     <span className="truncate">
                       {t("tool_jak_search_mode_location")}
+                    </span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="district"
+                    className="gap-1.5 text-xs sm:text-sm"
+                  >
+                    <Search className="w-4 h-4 shrink-0" />
+                    <span className="truncate">
+                      {t("tool_jak_search_mode_district")}
                     </span>
                   </TabsTrigger>
                 </TabsList>
