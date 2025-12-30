@@ -4,6 +4,16 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { AssessmentProvider } from "@/lib/assessment-context";
 import { I18nProvider } from "@/lib/i18n-context";
+import { Anek_Malayalam, Inter } from "next/font/google";
+const anekMalayalam = Anek_Malayalam({
+  subsets: ["latin"],
+  variable: "--font-anek-malayalam",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,9 +37,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html className={`${inter.variable} ${anekMalayalam.variable}`}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-slate-50`}
+        className={`antialiased min-h-screen bg-slate-50`}
       >
         <I18nProvider>
           <AssessmentProvider>{children}</AssessmentProvider>

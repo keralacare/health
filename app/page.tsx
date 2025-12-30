@@ -486,7 +486,6 @@ export default function LandingPage() {
             {[
               t("privacy_badge_no_signup"),
               t("privacy_badge_no_data"),
-              t("privacy_badge_no_tracking"),
               t("privacy_badge_anonymous"),
             ].map((item, i) => (
               <Badge
