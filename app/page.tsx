@@ -239,7 +239,6 @@ export default function LandingPage() {
                     </cite>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -538,26 +537,8 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-semibold text-white">
-                Healthy Life
-              </span>
-            </div>
-            <p className="text-sm text-center md:text-right">
-              {t("footer_disclaimer")}
-              <br />
-              {t("footer_consult_advice")}
-            </p>
-          </div>
-        </div>
-      </footer>
       <Footer />
+     
     </div>
   );
 }

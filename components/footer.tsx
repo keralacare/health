@@ -54,6 +54,13 @@ export function Footer() {
             <div className="text-sm text-gray-50 mt-4 md:mt-6 font-semibold">
               {t("footer_developed_by")}
             </div>
+            <div>
+              <p className="text-xs text-center md:text-right mt-2">
+                {t("footer_disclaimer")}
+                <br />
+                {t("footer_consult_advice")}
+              </p>
+            </div>
           </div>
         </div>
       </div>
