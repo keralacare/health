@@ -167,15 +167,15 @@ export default function LandingPage() {
             <Image
               src="/vibe-4-wellness-logo.png"
               alt="Vibe 4 Wellness Logo"
-              width={90}
+              width={85}
               height={80}
               className="object-contain"
             />
             <Image
-              src="/kerala-dark_state_logo.png"
+              src="/Kerala-sarkar-Emblem.png"
               alt="Kerala State Logo"
-              width={130}
-              height={80}
+              width={160}
+              height={100}
               className="object-contain"
             />
           </div>
