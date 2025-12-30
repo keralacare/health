@@ -40,6 +40,14 @@ export default function LandingPage() {
     resetAssessment();
   };
 
+  const scrollToTools = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const toolsSection = document.getElementById('tools');
+    if (toolsSection) {
+      toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
       {/* Header */}
@@ -90,7 +98,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[500px] md:min-h-[600px]">
+      <section className="relative overflow-hidden min-h-[500px] md:min-h-150">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -107,7 +115,7 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24 min-h-[500px] md:min-h-[600px] flex items-center">
+        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24 min-h-[500px] md:min-h-150 flex items-center">
           <div className="ml-auto w-full md:w-1/2 lg:w-1/2 text-center md:text-left">
             <p className="text-lg md:text-xl text-slate-600 mb-2 font-medium">
               {t("hero_badge")}
@@ -131,28 +139,27 @@ export default function LandingPage() {
                   <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
-              <Link href="/tools/bmi-calculator">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="gap-2 w-full sm:w-auto cursor-pointer"
-                >
-                  <Calculator className="w-5 h-5" />
-                  {t("hero_cta_secondary")}
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2 w-full sm:w-auto cursor-pointer"
+                onClick={scrollToTools}
+              >
+                <Calculator className="w-5 h-5" />
+                {t("hero_cta_secondary")}
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Chief Minister Section */}
-      <section id="legacy-of-compassion">
-        <div className="bg-white shadow-md rounded-lg max-w-6xl mx-auto my-4">
-          <div className="container mx-auto px-4 py-4">
+      <section id="cm-legacy-of-compassion" className="pt-20">
+        <div className="bg-white shadow-md rounded-lg max-w-6xl sm:mx-auto mx-2 my-4">
+          <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col md:flex-row items-center gap-y-8 pb-4">
-                <div className="w-full md:w-1/3">
+              <div className="flex flex-col md:flex-row items-center gap-y-8">
+                <div className="w-full md:w-1/3 xl:rounded-lg overflow-hidden -mt-10">
                   <Image
                     src="/cm-portrait.png"
                     alt="Chief Minister"
@@ -169,6 +176,22 @@ export default function LandingPage() {
                     <cite className="text-primary-800 font-semibold text-lg text-center md:text-left">
                       {t("legacy_author")}
                     </cite>
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src="/vibe-4-wellness-logo.png"
+                        alt="Vibe 4 Wellness Logo"
+                        width={60}
+                        height={80}
+                        className="object-contain"
+                      />
+                      <Image
+                        src="/kerala-dark_state_logo.png"
+                        alt="Kerala State Logo"
+                        width={100}
+                        height={80}
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -178,12 +201,12 @@ export default function LandingPage() {
       </section>
 
 
-      <section id="legacy-of-compassion" className="pt-20">
-        <div className="bg-white shadow-md rounded-lg max-w-6xl mx-auto my-4">
-          <div className="container mx-auto px-4 py-4">
+      <section id="hm-legacy-of-compassion" className="pt-20">
+        <div className="bg-white shadow-md rounded-lg max-w-6xl sm:mx-auto mx-2 my-4">
+          <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col md:flex-row items-center gap-y-8 pb-4">
-                <div className="w-full md:w-1/3">
+              <div className="flex flex-col md:flex-row items-center gap-y-8">
+                <div className="w-full md:w-1/3 xl:rounded-lg overflow-hidden -mt-10">
                   <Image
                     src="/hm-portrait.png"
                     alt="Health Minister"
@@ -200,6 +223,22 @@ export default function LandingPage() {
                     <cite className="text-primary-800 font-semibold text-lg text-center md:text-left">
                       {t("health_minister_author")}
                     </cite>
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src="/vibe-4-wellness-logo.png"
+                        alt="Vibe 4 Wellness Logo"
+                        width={60}
+                        height={80}
+                        className="object-contain"
+                      />
+                      <Image
+                        src="/kerala-dark_state_logo.png"
+                        alt="Kerala State Logo"
+                        width={100}
+                        height={80}
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
