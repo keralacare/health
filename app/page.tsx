@@ -42,20 +42,20 @@ export default function LandingPage() {
 
   const scrollToTools = (e: React.MouseEvent) => {
     e.preventDefault();
-    const toolsSection = document.getElementById('tools');
+    const toolsSection = document.getElementById("tools");
     if (toolsSection) {
-      toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      toolsSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-slate-50">
+    <div className="min-h-screen bg-linear-to-b from-gray-100 via-white to-slate-50">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
                 <Heart className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -98,38 +98,45 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[500px] md:min-h-150">
+      <section className="relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="/hero.png"
+            src="/hero-lg.png"
             alt="Doctor Owl examining Turtle - Your Health Companion"
             fill
             className="object-cover object-left"
             priority
           />
           {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-emerald-50/80 sm:bg-linear-to-r from-transparent via-transparent to-emerald-50/95 md:to-emerald-50/90 sm:hidden" />
-          <div className="absolute inset-0 sm:bg-linear-to-r from-transparent via-transparent to-emerald-50/95 md:to-emerald-50/90" />
-          <div className="absolute inset-0 sm:bg-linear-to-r from-transparent via-transparent to-white/80 md:via-white/20 md:to-white/70" />
+          <div className="absolute inset-0 lg:bg-linear-to-r from-transparent via-cyan-700/20 to-cyan-700/95 md:to-cyan-800/90" />
+        </div>
+
+        <div className="absolute inset-0 lg:hidden">
+          <Image
+            src="/hero-mobile.png"
+            alt="Doctor Owl examining Turtle - Your Health Companion"
+            fill
+            className="object-cover sm:object-bottom object-center"
+            priority
+          />
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-linear-to-t from-transparent via-cyan-700/20 to-cyan-700/95 md:to-cyan-800/90 " />
         </div>
 
         {/* Hero Content */}
-        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24 min-h-[500px] md:min-h-150 flex items-center">
-          <div className="ml-auto w-full md:w-1/2 lg:w-1/2 text-center md:text-left">
-            <p className="text-lg md:text-xl text-slate-600 mb-2 font-medium">
+        <div className="relative max-w-6xl mx-auto flex items-center">
+          <div className="ml-auto w-full lg:w-1/2 text-center pt-16 pb-80 sm:pb-120 lg:py-24 px-4 lg:text-left">
+            <p className="text-base md:text-2xl lg:text-3xl text-white tracking-wider text-shadow-xs">
               {t("hero_badge")}
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 mb-4">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-wider text-white text-shadow-xs">
               {t("hero_title")}
-              <span className="block text-emerald-600 text-5xl md:text-6xl lg:text-7xl">
-                {t("hero_title_highlight")}
-              </span>
             </h1>
-            <p className="text-base md:text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
+            <p className="text-base md:text-lg  ms:max-w-lg text-white mb-4 text-shadow-2xs">
               {t("hero_description")}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link href="/assessment/step-1" onClick={handleStartAssessment}>
                 <Button
                   size="lg"
@@ -153,10 +160,33 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="py-20">
+        <div className="flex items-center gap-4 justify-center max-w-5xl mx-auto px-4">
+          <div className="flex-1 h-px bg-gray-300" />
+          <div className="flex items-center gap-8">
+            <Image
+              src="/vibe-4-wellness-logo.png"
+              alt="Vibe 4 Wellness Logo"
+              width={90}
+              height={80}
+              className="object-contain"
+            />
+            <Image
+              src="/kerala-dark_state_logo.png"
+              alt="Kerala State Logo"
+              width={130}
+              height={80}
+              className="object-contain"
+            />
+          </div>
+          <div className="flex-1 h-px bg-gray-300" />
+        </div>
+      </section>
+
       {/* Chief Minister Section */}
-      <section id="cm-legacy-of-compassion" className="pt-20">
+      <section id="cm-legacy-of-compassion">
         <div className="bg-white shadow-md rounded-lg max-w-6xl sm:mx-auto mx-2 my-4">
-          <div className="container mx-auto">
+          <div className="container mx-auto p-4 lg:p-0">
             <div className="max-w-6xl mx-auto">
               <div className="flex flex-col md:flex-row items-center gap-y-8">
                 <div className="w-full md:w-1/3 xl:rounded-lg overflow-hidden -mt-10">
@@ -176,22 +206,6 @@ export default function LandingPage() {
                     <cite className="text-primary-800 font-semibold text-lg text-center md:text-left">
                       {t("legacy_author")}
                     </cite>
-                    <div className="flex items-center gap-4">
-                      <Image
-                        src="/vibe-4-wellness-logo.png"
-                        alt="Vibe 4 Wellness Logo"
-                        width={60}
-                        height={80}
-                        className="object-contain"
-                      />
-                      <Image
-                        src="/kerala-dark_state_logo.png"
-                        alt="Kerala State Logo"
-                        width={100}
-                        height={80}
-                        className="object-contain"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -200,47 +214,32 @@ export default function LandingPage() {
         </div>
       </section>
 
-
       <section id="hm-legacy-of-compassion" className="pt-20">
         <div className="bg-white shadow-md rounded-lg max-w-6xl sm:mx-auto mx-2 my-4">
-          <div className="container mx-auto">
+          <div className="container mx-auto p-4 lg:p-0">
             <div className="max-w-6xl mx-auto">
               <div className="flex flex-col md:flex-row items-center gap-y-8">
-                <div className="w-full md:w-1/3 xl:rounded-lg overflow-hidden -mt-10">
+                <div className="w-full md:w-1/3 -mt-12 md:order-2 xl:rounded-br-lg overflow-hidden">
                   <Image
                     src="/hm-portrait.png"
                     alt="Health Minister"
                     width={346}
                     height={368}
+                    className="lg:w-full"
                   />
                 </div>
-                <div className="w-full md:w-2/3 space-y-4 md:pr-10">
+                <div className="w-full md:w-2/3 space-y-4 md:px-10">
                   <Title>{t("health_minister_title")}</Title>
-                  <blockquote className="text-gray-600 leading-relaxed md:pr-16">
+                  <blockquote className="text-gray-600 leading-relaxed">
                     &ldquo;{t("health_minister_quote")}&rdquo;
                   </blockquote>
                   <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <cite className="text-primary-800 font-semibold text-lg text-center md:text-left">
                       {t("health_minister_author")}
                     </cite>
-                    <div className="flex items-center gap-4">
-                      <Image
-                        src="/vibe-4-wellness-logo.png"
-                        alt="Vibe 4 Wellness Logo"
-                        width={60}
-                        height={80}
-                        className="object-contain"
-                      />
-                      <Image
-                        src="/kerala-dark_state_logo.png"
-                        alt="Kerala State Logo"
-                        width={100}
-                        height={80}
-                        className="object-contain"
-                      />
-                    </div>
                   </div>
                 </div>
+                
               </div>
             </div>
           </div>
@@ -265,9 +264,9 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* BMI Calculator */}
             <Link href="/tools/bmi-calculator" className="group">
-              <Card className="h-full bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 hover:-translate-y-1">
+              <Card className="h-full bg-linear-to-br from-emerald-50 to-teal-50 border-emerald-200 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
                     <Calculator className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-slate-900">
@@ -288,9 +287,9 @@ export default function LandingPage() {
 
             {/* BP Tracker */}
             <Link href="/tools/bp-checker" className="group">
-              <Card className="h-full bg-gradient-to-br from-rose-50 to-pink-50 border-rose-200 hover:shadow-lg hover:shadow-rose-500/10 transition-all duration-300 hover:-translate-y-1">
+              <Card className="h-full bg-linear-to-br from-rose-50 to-pink-50 border-rose-200 hover:shadow-lg hover:shadow-rose-500/10 transition-all duration-300 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center mb-4 shadow-lg shadow-rose-500/30 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-rose-500 to-pink-600 flex items-center justify-center mb-4 shadow-lg shadow-rose-500/30 group-hover:scale-110 transition-transform">
                     <HeartPulse className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-slate-900">
@@ -310,9 +309,9 @@ export default function LandingPage() {
 
             {/* Blood Sugar Checker */}
             <Link href="/tools/sugar-checker" className="group">
-              <Card className="h-full bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 hover:-translate-y-1">
+              <Card className="h-full bg-linear-to-br from-amber-50 to-orange-50 border-amber-200 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform">
                     <Droplet className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-slate-900">
@@ -333,9 +332,9 @@ export default function LandingPage() {
 
             {/* Cancer Screening */}
             <Link href="/tools/cancer-screening" className="group">
-              <Card className="h-full bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-1">
+              <Card className="h-full bg-linear-to-br from-purple-50 to-violet-50 border-purple-200 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500 to-violet-600 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform">
                     <Ribbon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-slate-900">
@@ -356,9 +355,9 @@ export default function LandingPage() {
 
             {/* UHID Registration */}
             <Link href="/tools/uhid-registration" className="group">
-              <Card className="h-full bg-gradient-to-br from-sky-50 to-blue-50 border-sky-200 hover:shadow-lg hover:shadow-sky-500/10 transition-all duration-300 hover:-translate-y-1">
+              <Card className="h-full bg-linear-to-br from-sky-50 to-blue-50 border-sky-200 hover:shadow-lg hover:shadow-sky-500/10 transition-all duration-300 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform">
                     <IdCard className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-slate-900">
@@ -379,9 +378,9 @@ export default function LandingPage() {
 
             {/* Find JAK */}
             <Link href="/tools/find-jak" className="group">
-              <Card className="h-full bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200 hover:shadow-lg hover:shadow-teal-500/10 transition-all duration-300 hover:-translate-y-1">
+              <Card className="h-full bg-linear-to-br from-teal-50 to-cyan-50 border-teal-200 hover:shadow-lg hover:shadow-teal-500/10 transition-all duration-300 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-teal-500/30 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-teal-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-teal-500/30 group-hover:scale-110 transition-transform">
                     <Building2 className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-slate-900">
@@ -406,7 +405,7 @@ export default function LandingPage() {
       {/* Full Assessment Section */}
       <section
         id="assessment"
-        className="py-16 md:py-24 bg-gradient-to-b from-slate-50 to-white"
+        className="py-16 md:py-24 bg-linear-to-b from-slate-50 to-white"
       >
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -453,10 +452,10 @@ export default function LandingPage() {
             </div>
 
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-3xl blur-3xl" />
+              <div className="absolute inset-0 bg-linear-to-br from-emerald-500/20 to-teal-500/20 rounded-3xl blur-3xl" />
               <Card className="relative bg-white border-slate-200 shadow-2xl shadow-slate-200/50">
                 <CardHeader className="text-center pb-2">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <ClipboardCheck className="w-8 h-8 text-white" />
                   </div>
                   <CardTitle className="text-2xl">

@@ -29,6 +29,39 @@ export const metadata: Metadata = {
   title: "Healthy Life Campaign - Health Risk Assessment",
   description:
     "Check your health risks in 5 minutes. A free, private health risk assessment tool.",
+  metadataBase: new URL("https://health.kerala.care"),
+  openGraph: {
+    title: "Healthy Life Campaign - Health Risk Assessment",
+    description:
+      "Check your health risks in 5 minutes. Free, private health risk assessment tool. Eat well · Act well · Sleep well · Care well",
+    url: "https://health.kerala.care",
+    siteName: "Healthy Life Campaign",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/hl-og.png",
+        width: 1200,
+        height: 630,
+        alt: "Healthy Life Campaign - Eat well · Act well · Sleep well · Care well",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Healthy Life Campaign - Health Risk Assessment",
+    description:
+      "Check your health risks in 5 minutes. Free, private health risk assessment tool.",
+    images: ["/hl-og.png"],
+  },
+  keywords: [
+    "health assessment",
+    "health risk",
+    "Kerala health",
+    "preventive healthcare",
+    "wellness check",
+    "health screening",
+  ],
 };
 
 export default function RootLayout({
