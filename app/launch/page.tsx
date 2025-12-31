@@ -3,10 +3,25 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { 
-  Rocket, Heart, Sparkles, Star, Calculator, HeartPulse, 
-  Droplet, Ribbon, Shield, ClipboardCheck, Utensils, Moon,
-  Activity, Users, Building2, Check, ArrowRight, Zap
+import {
+  Rocket,
+  Heart,
+  Sparkles,
+  Star,
+  Calculator,
+  HeartPulse,
+  Droplet,
+  Ribbon,
+  Shield,
+  ClipboardCheck,
+  Utensils,
+  Moon,
+  Activity,
+  Users,
+  Building2,
+  Check,
+  ArrowRight,
+  Zap,
 } from "lucide-react";
 
 interface Particle {
@@ -90,7 +105,11 @@ const frames = [
     bgGradient: "from-blue-500/30 via-indigo-500/20 to-transparent",
     accentColor: "blue",
     tools: [
-      { icon: Calculator, name: "BMI", color: "from-emerald-500 to-emerald-600" },
+      {
+        icon: Calculator,
+        name: "BMI",
+        color: "from-emerald-500 to-emerald-600",
+      },
       { icon: HeartPulse, name: "BP", color: "from-rose-500 to-rose-600" },
       { icon: Droplet, name: "Sugar", color: "from-amber-500 to-amber-600" },
       { icon: Ribbon, name: "Cancer", color: "from-purple-500 to-purple-600" },
@@ -142,7 +161,15 @@ const frames = [
 
 export default function LaunchPage() {
   const router = useRouter();
-  const [phase, setPhase] = useState<"intro" | "ready" | "countdown" | "frames" | "final" | "celebration" | "redirect">("intro");
+  const [phase, setPhase] = useState<
+    | "intro"
+    | "ready"
+    | "countdown"
+    | "frames"
+    | "final"
+    | "celebration"
+    | "redirect"
+  >("intro");
   const [countdown, setCountdown] = useState(3);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [totalProgress, setTotalProgress] = useState(0);
@@ -193,15 +220,15 @@ export default function LaunchPage() {
       clearTimeout(timer4);
       clearTimeout(timer5);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Pulse rings for ready state
   useEffect(() => {
     if (phase !== "ready") return;
     const interval = setInterval(() => {
-      setPulseRings(prev => [...prev, Date.now()]);
-      setTimeout(() => setPulseRings(prev => prev.slice(1)), 1500);
+      setPulseRings((prev) => [...prev, Date.now()]);
+      setTimeout(() => setPulseRings((prev) => prev.slice(1)), 1500);
     }, 400);
     return () => clearInterval(interval);
   }, [phase]);
@@ -209,12 +236,12 @@ export default function LaunchPage() {
   // Typewriter effect for frame highlights
   useEffect(() => {
     if (phase !== "frames") return;
-    
+
     const currentHighlight = frames[currentFrame].highlight;
     setAnimatedText("");
     setShowHighlight(false);
-    setFrameKey(prev => prev + 1);
-    
+    setFrameKey((prev) => prev + 1);
+
     const startDelay = setTimeout(() => {
       setShowHighlight(true);
       let charIndex = 0;
@@ -226,31 +253,35 @@ export default function LaunchPage() {
           clearInterval(typeInterval);
         }
       }, 25);
-      
+
       return () => clearInterval(typeInterval);
     }, 150);
-    
+
     return () => clearTimeout(startDelay);
   }, [phase, currentFrame]);
 
   const generateConfetti = useCallback(() => {
     const newConfetti: Confetti[] = Array.from({ length: 300 }, (_, i) => ({
       id: i,
-      x: 50 + (Math.random() - 0.5) * 80,
-      y: 10 + Math.random() * 40,
+      x: Math.random() * 100,
+      y: -10 + Math.random() * 40,
       rotation: Math.random() * 360,
       color: colors[Math.floor(Math.random() * colors.length)],
       size: Math.random() * 18 + 8,
       delay: Math.random() * 0.6,
     }));
     setConfetti(newConfetti);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const playBeep = useCallback((frequency: number, duration: number) => {
     try {
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        audioContextRef.current = new (
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext })
+            .webkitAudioContext
+        )();
       }
       const ctx = audioContextRef.current;
       const oscillator = ctx.createOscillator();
@@ -260,7 +291,10 @@ export default function LaunchPage() {
       oscillator.frequency.value = frequency;
       oscillator.type = "sine";
       gainNode.gain.setValueAtTime(0.06, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        ctx.currentTime + duration / 1000
+      );
       oscillator.start(ctx.currentTime);
       oscillator.stop(ctx.currentTime + duration / 1000);
     } catch {
@@ -270,12 +304,12 @@ export default function LaunchPage() {
 
   const handleLaunch = useCallback(() => {
     if (phase !== "ready") return;
-    
+
     setPhase("countdown");
     let count = 3;
     setCountdown(count);
     playBeep(440, 150);
-    
+
     const countdownInterval = setInterval(() => {
       count--;
       if (count > 0) {
@@ -294,29 +328,32 @@ export default function LaunchPage() {
   // Continuous progress across ALL frames
   useEffect(() => {
     if (phase !== "frames") return;
-    
+
     const totalDuration = 15000; // 15 seconds total for all frames
     const frameDuration = totalDuration / frames.length;
     const progressInterval = 30;
     let elapsed = 0;
     let lastFrameIndex = 0;
-    
+
     const interval = setInterval(() => {
       elapsed += progressInterval;
       const progress = (elapsed / totalDuration) * 100;
       setTotalProgress(progress);
-      
+
       // Calculate which frame we should be on
-      const frameIndex = Math.min(Math.floor(elapsed / frameDuration), frames.length - 1);
+      const frameIndex = Math.min(
+        Math.floor(elapsed / frameDuration),
+        frames.length - 1
+      );
       if (frameIndex !== lastFrameIndex) {
         lastFrameIndex = frameIndex;
         setCurrentFrame(frameIndex);
       }
-      
+
       if (progress >= 100) {
         clearInterval(interval);
         setPhase("final");
-        
+
         setTimeout(() => {
           setPhase("celebration");
           generateConfetti();
@@ -324,7 +361,7 @@ export default function LaunchPage() {
           setTimeout(() => playBeep(659, 100), 100);
           setTimeout(() => playBeep(784, 100), 200);
           setTimeout(() => playBeep(1047, 300), 300);
-          
+
           setTimeout(() => {
             setPhase("redirect");
             setTimeout(() => router.push("/"), 1200);
@@ -332,9 +369,9 @@ export default function LaunchPage() {
         }, 1000);
       }
     }, progressInterval);
-    
+
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
   const currentFrameData = frames[currentFrame];
@@ -345,7 +382,9 @@ export default function LaunchPage() {
       <div className="absolute inset-0 overflow-hidden">
         {phase === "frames" && (
           <>
-            <div className={`absolute inset-0 bg-gradient-radial ${currentFrameData.bgGradient} opacity-80 transition-all duration-500`} />
+            <div
+              className={`absolute inset-0 bg-gradient-radial ${currentFrameData.bgGradient} opacity-80 transition-all duration-500`}
+            />
             {/* Animated light beams */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-full bg-gradient-to-b from-white/20 via-white/5 to-transparent animate-beam-1" />
             <div className="absolute top-0 left-1/3 w-[1px] h-full bg-gradient-to-b from-white/10 via-white/5 to-transparent animate-beam-2" />
@@ -358,12 +397,12 @@ export default function LaunchPage() {
       </div>
 
       {/* Animated grid that pulses */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.03] animate-grid-pulse"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
+          backgroundSize: "60px 60px",
         }}
       />
 
@@ -388,48 +427,50 @@ export default function LaunchPage() {
       </div>
 
       {/* Confetti */}
-      {phase === "celebration" && confetti.map((c) => (
-        <div
-          key={c.id}
-          className="absolute animate-confetti pointer-events-none"
-          style={{
-            left: `${c.x}%`,
-            top: `${c.y}%`,
-            animationDelay: `${c.delay}s`,
-          }}
-        >
+      {phase === "celebration" &&
+        confetti.map((c) => (
           <div
-            className="rounded-sm"
+            key={c.id}
+            className="absolute animate-confetti pointer-events-none"
             style={{
-              width: c.size,
-              height: c.size * 0.5,
-              backgroundColor: c.color,
-              transform: `rotate(${c.rotation}deg)`,
-              boxShadow: `0 0 12px ${c.color}`,
+              left: `${c.x}%`,
+              top: `${c.y}%`,
+              animationDelay: `${c.delay}s`,
             }}
-          />
-        </div>
-      ))}
+          >
+            <div
+              className="rounded-sm"
+              style={{
+                width: c.size,
+                height: c.size * 0.5,
+                backgroundColor: c.color,
+                transform: `rotate(${c.rotation}deg)`,
+                boxShadow: `0 0 12px ${c.color}`,
+              }}
+            />
+          </div>
+        ))}
 
       {/* Main content */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-        
         {/* Kerala Emblem with float animation */}
-        <div className={`absolute top-6 transition-all duration-500 ${textReveal >= 1 ? 'opacity-100' : 'opacity-0'}`}>
+        {/* <div className={`absolute top-6 transition-all duration-500 ${textReveal >= 1 ? 'opacity-100' : 'opacity-0'}`}>
           <Image
-            src="/Kerala-sarkar-Emblem.png"
+            src="/kerala-dark_state_logo.png"
             alt="Kerala State Emblem"
             width={90}
             height={58}
-            className="object-contain opacity-40 animate-float-slow"
+            className="object-contain opacity-40 animate-float-slow invert"
           />
-        </div>
+        </div> */}
 
         {/* INTRO & READY */}
         {(phase === "intro" || phase === "ready") && (
           <div className="text-center">
             {/* Animated logo */}
-            <div className={`flex items-center justify-center mb-6 transition-all duration-500 ${textReveal >= 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+            <div
+              className={`flex items-center justify-center mb-6 transition-all duration-500 ${textReveal >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-50"}`}
+            >
               <div className="relative">
                 <div className="absolute -inset-8 rounded-full bg-gradient-to-r from-emerald-500/30 via-teal-500/30 to-cyan-500/30 blur-xl animate-spin-slow" />
                 <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/20 via-emerald-500/20 to-teal-500/20 blur-lg animate-spin-slow-reverse" />
@@ -439,56 +480,143 @@ export default function LaunchPage() {
                   <Zap className="absolute -bottom-2 -left-2 w-5 h-5 text-cyan-300 animate-sparkle-delay" />
                   <Star className="absolute top-0 -left-3 w-4 h-4 text-pink-300 animate-twinkle" />
                 </div>
-                {phase === "ready" && pulseRings.map((ring) => (
-                  <div key={ring} className="absolute inset-0 rounded-3xl border-2 border-emerald-400/50 animate-ping-fast" />
-                ))}
+                {phase === "ready" &&
+                  pulseRings.map((ring) => (
+                    <div
+                      key={ring}
+                      className="absolute inset-0 rounded-3xl border-2 border-emerald-400/50 animate-ping-fast"
+                    />
+                  ))}
               </div>
             </div>
-            
+
             {/* Title with letter animations */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-3 tracking-tight overflow-hidden">
-              <span className={`inline-block transition-all duration-500 ${textReveal >= 2 ? 'opacity-100 translate-y-0 rotate-0' : 'opacity-0 translate-y-full rotate-12'}`}>
+              <span
+                className={`inline-block transition-all duration-500 ${textReveal >= 2 ? "opacity-100 translate-y-0 rotate-0" : "opacity-0 translate-y-full rotate-12"}`}
+              >
                 <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent animate-shimmer-text inline-block hover:scale-110 transition-transform">
                   Healthy
                 </span>
               </span>
               <span className="inline-block mx-3" />
-              <span className={`inline-block transition-all duration-500 delay-150 ${textReveal >= 2 ? 'opacity-100 translate-y-0 rotate-0' : 'opacity-0 translate-y-full -rotate-12'}`}>
+              <span
+                className={`inline-block transition-all duration-500 delay-150 ${textReveal >= 2 ? "opacity-100 translate-y-0 rotate-0" : "opacity-0 translate-y-full -rotate-12"}`}
+              >
                 <span className="bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-300 bg-clip-text text-transparent animate-shimmer-text-reverse inline-block hover:scale-110 transition-transform">
                   Life
                 </span>
               </span>
             </h1>
-            
-            <p className={`text-xl md:text-2xl text-emerald-200/80 mb-3 transition-all duration-500 ${textReveal >= 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+
+            <p
+              className={`text-xl md:text-2xl text-emerald-200/80 mb-3 transition-all duration-500 ${textReveal >= 3 ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
+            >
               <span className="animate-word-fade-1">Kerala&apos;s</span>{" "}
               <span className="animate-word-fade-2">Health</span>{" "}
               <span className="animate-word-fade-3">&amp;</span>{" "}
               <span className="animate-word-fade-4">Wellness</span>{" "}
               <span className="animate-word-fade-5">Campaign</span>
             </p>
-            
-            <div className={`flex items-center justify-center gap-2 text-teal-300/60 text-base mb-10 transition-all duration-700 ${showTagline ? 'opacity-100' : 'opacity-0'}`}>
+
+            <div
+              className={`flex items-center justify-center gap-2 text-teal-300/60 text-base mb-10 transition-all duration-700 ${showTagline ? "opacity-100" : "opacity-0"}`}
+            >
               <Sparkles className="w-4 h-4 animate-pulse" />
               <span className="tracking-[0.2em] animate-text-glow">
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0s' }}>E</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.05s' }}>a</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.1s' }}>t</span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0s" }}
+                >
+                  E
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.05s" }}
+                >
+                  a
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.1s" }}
+                >
+                  t
+                </span>
                 <span className="inline-block mx-1">·</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.2s' }}>A</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.25s' }}>c</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.3s' }}>t</span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.2s" }}
+                >
+                  A
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.25s" }}
+                >
+                  c
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.3s" }}
+                >
+                  t
+                </span>
                 <span className="inline-block mx-1">·</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.4s' }}>S</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.45s' }}>l</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.5s' }}>e</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.55s' }}>e</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.6s' }}>p</span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.4s" }}
+                >
+                  S
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.45s" }}
+                >
+                  l
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.5s" }}
+                >
+                  e
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.55s" }}
+                >
+                  e
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.6s" }}
+                >
+                  p
+                </span>
                 <span className="inline-block mx-1">·</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.7s' }}>C</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.75s' }}>a</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.8s' }}>r</span>
-                <span className="animate-letter-bounce inline-block" style={{ animationDelay: '0.85s' }}>e</span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.7s" }}
+                >
+                  C
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.75s" }}
+                >
+                  a
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.8s" }}
+                >
+                  r
+                </span>
+                <span
+                  className="animate-letter-bounce inline-block"
+                  style={{ animationDelay: "0.85s" }}
+                >
+                  e
+                </span>
               </span>
               <Sparkles className="w-4 h-4 animate-pulse" />
             </div>
@@ -507,7 +635,9 @@ export default function LaunchPage() {
                 </div>
                 <span className="relative flex items-center gap-3">
                   <Rocket className="w-6 h-6 group-hover:-rotate-45 group-hover:-translate-y-1 transition-all duration-300" />
-                  <span className="group-hover:tracking-wider transition-all duration-300">LAUNCH</span>
+                  <span className="group-hover:tracking-wider transition-all duration-300">
+                    LAUNCH
+                  </span>
                   <Zap className="w-5 h-5 animate-pulse group-hover:animate-spin" />
                 </span>
               </button>
@@ -527,8 +657,14 @@ export default function LaunchPage() {
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-40 h-40 rounded-full border-4 border-emerald-400/40 animate-ping" />
-                <div className="absolute w-60 h-60 rounded-full border-2 border-teal-400/30 animate-ping" style={{ animationDelay: '0.2s' }} />
-                <div className="absolute w-80 h-80 rounded-full border border-cyan-400/20 animate-ping" style={{ animationDelay: '0.4s' }} />
+                <div
+                  className="absolute w-60 h-60 rounded-full border-2 border-teal-400/30 animate-ping"
+                  style={{ animationDelay: "0.2s" }}
+                />
+                <div
+                  className="absolute w-80 h-80 rounded-full border border-cyan-400/20 animate-ping"
+                  style={{ animationDelay: "0.4s" }}
+                />
               </div>
             </div>
           </div>
@@ -537,15 +673,6 @@ export default function LaunchPage() {
         {/* FRAMES - Cinematic showcase */}
         {phase === "frames" && currentFrameData && (
           <div key={frameKey} className="w-full max-w-4xl mx-auto text-center">
-            {/* Frame counter with animation */}
-            <div className="absolute top-6 right-6 flex items-center gap-2">
-              <div className="flex items-center gap-1.5 text-white/50 text-sm font-mono bg-white/5 backdrop-blur-sm px-3 py-1 rounded-full animate-slide-in-right">
-                <span className="text-white/80 animate-number-pop">{String(currentFrame + 1).padStart(2, '0')}</span>
-                <span className="animate-pulse">/</span>
-                <span>{String(frames.length).padStart(2, '0')}</span>
-              </div>
-            </div>
-
             {/* Animated corner decorations */}
             <div className="absolute top-20 left-8 w-20 h-20 border-l-2 border-t-2 border-white/10 animate-corner-tl" />
             <div className="absolute top-20 right-8 w-20 h-20 border-r-2 border-t-2 border-white/10 animate-corner-tr" />
@@ -556,9 +683,13 @@ export default function LaunchPage() {
             <div className="flex justify-center mb-6">
               <div className="relative">
                 {/* Orbiting rings */}
-                <div className={`absolute -inset-6 rounded-full border border-white/10 animate-orbit-icon`} />
-                <div className={`absolute -inset-10 rounded-full border border-white/5 animate-orbit-icon-reverse`} />
-                
+                <div
+                  className={`absolute -inset-6 rounded-full border border-white/10 animate-orbit-icon`}
+                />
+                <div
+                  className={`absolute -inset-10 rounded-full border border-white/5 animate-orbit-icon-reverse`}
+                />
+
                 {/* Orbiting dots */}
                 <div className="absolute -inset-8 animate-orbit-dot">
                   <div className="absolute top-0 left-1/2 w-2 h-2 bg-white/40 rounded-full" />
@@ -567,10 +698,14 @@ export default function LaunchPage() {
                   <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-white/30 rounded-full" />
                 </div>
 
-                <div className={`relative w-28 h-28 md:w-36 md:h-36 rounded-3xl bg-gradient-to-br ${currentFrameData.gradient} flex items-center justify-center shadow-2xl animate-icon-explode`}>
+                <div
+                  className={`relative w-28 h-28 md:w-36 md:h-36 rounded-3xl bg-gradient-to-br ${currentFrameData.gradient} flex items-center justify-center shadow-2xl animate-icon-explode`}
+                >
                   <currentFrameData.icon className="w-14 h-14 md:w-18 md:h-18 text-white animate-icon-breathe" />
-                  <div className={`absolute -inset-3 rounded-3xl bg-gradient-to-br ${currentFrameData.gradient} opacity-40 blur-xl animate-pulse`} />
-                  
+                  <div
+                    className={`absolute -inset-3 rounded-3xl bg-gradient-to-br ${currentFrameData.gradient} opacity-40 blur-xl animate-pulse`}
+                  />
+
                   {/* Corner sparks */}
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-spark-1" />
                   <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-white rounded-full animate-spark-2" />
@@ -582,14 +717,16 @@ export default function LaunchPage() {
 
             {/* Title with character animation */}
             <h2 className="text-5xl md:text-7xl lg:text-8xl font-black mb-2 overflow-hidden">
-              <span className={`bg-gradient-to-r ${currentFrameData.gradient} bg-clip-text text-transparent inline-block animate-title-reveal`}>
-                {currentFrameData.title.split('').map((char, i) => (
-                  <span 
-                    key={i} 
+              <span
+                className={`bg-gradient-to-r ${currentFrameData.gradient} bg-clip-text text-transparent inline-block animate-title-reveal`}
+              >
+                {currentFrameData.title.split("").map((char, i) => (
+                  <span
+                    key={i}
                     className="inline-block animate-char-pop"
                     style={{ animationDelay: `${i * 0.03}s` }}
                   >
-                    {char === ' ' ? '\u00A0' : char}
+                    {char === " " ? "\u00A0" : char}
                   </span>
                 ))}
               </span>
@@ -598,9 +735,9 @@ export default function LaunchPage() {
             {/* Subtitle with slide and fade */}
             <p className="text-xl md:text-2xl text-white/60 mb-4 tracking-wide overflow-hidden">
               <span className="inline-block animate-subtitle-slide">
-                {currentFrameData.subtitle.split(' ').map((word, i) => (
-                  <span 
-                    key={i} 
+                {currentFrameData.subtitle.split(" ").map((word, i) => (
+                  <span
+                    key={i}
                     className="inline-block animate-word-pop mx-1"
                     style={{ animationDelay: `${0.1 + i * 0.08}s` }}
                   >
@@ -633,13 +770,13 @@ export default function LaunchPage() {
                     key={tool.name}
                     className="flex flex-col items-center gap-2"
                   >
-                    <div 
+                    <div
                       className={`w-14 h-14 md:w-18 md:h-18 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg animate-tool-bounce hover:scale-110 transition-transform cursor-pointer`}
                       style={{ animationDelay: `${i * 0.1}s` }}
                     >
                       <tool.icon className="w-7 h-7 md:w-9 md:h-9 text-white" />
                     </div>
-                    <span 
+                    <span
                       className="text-white/50 text-xs font-medium animate-fade-up"
                       style={{ animationDelay: `${0.2 + i * 0.1}s` }}
                     >
@@ -659,7 +796,10 @@ export default function LaunchPage() {
                     className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 animate-feature-fly hover:bg-white/20 transition-colors cursor-pointer"
                     style={{ animationDelay: `${i * 0.12}s` }}
                   >
-                    <Check className="w-4 h-4 text-emerald-400 animate-check-pop" style={{ animationDelay: `${0.3 + i * 0.12}s` }} />
+                    <Check
+                      className="w-4 h-4 text-emerald-400 animate-check-pop"
+                      style={{ animationDelay: `${0.3 + i * 0.12}s` }}
+                    />
                     <span className="text-white/80 text-sm">{feature}</span>
                   </div>
                 ))}
@@ -675,7 +815,9 @@ export default function LaunchPage() {
                     className={`bg-gradient-to-r ${currentFrameData.gradient} rounded-full px-5 py-2 animate-badge-scale hover:scale-110 transition-transform cursor-pointer shadow-lg`}
                     style={{ animationDelay: `${i * 0.12}s` }}
                   >
-                    <span className="text-white font-semibold text-sm">{badge}</span>
+                    <span className="text-white font-semibold text-sm">
+                      {badge}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -685,96 +827,66 @@ export default function LaunchPage() {
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-2xl px-6">
               {/* Main progress bar */}
               <div className="relative h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-                <div 
+                <div
                   className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-full transition-all duration-100 ease-linear"
                   style={{ width: `${totalProgress}%` }}
                 >
                   {/* Shimmer effect on progress */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer-fast" />
                 </div>
-                
+
                 {/* Glow effect at the end */}
-                <div 
+                <div
                   className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-sm animate-pulse"
                   style={{ left: `calc(${totalProgress}% - 8px)` }}
                 />
-              </div>
-              
-              {/* Frame markers on progress bar */}
-              <div className="absolute top-0 left-0 right-0 h-2 flex">
-                {frames.map((_, i) => (
-                  <div 
-                    key={i} 
-                    className="flex-1 flex justify-end"
-                  >
-                    <div className={`w-0.5 h-full ${i < frames.length - 1 ? 'bg-white/20' : ''}`} />
-                  </div>
-                ))}
-              </div>
-              
-              {/* Progress info */}
-              <div className="flex justify-between items-center mt-3">
-                <div className="flex gap-1">
-                  {frames.map((frame, i) => (
-                    <div
-                      key={i}
-                      className={`h-1 rounded-full transition-all duration-300 ${
-                        i === currentFrame 
-                          ? 'w-4 bg-white' 
-                          : i < currentFrame 
-                            ? 'w-1.5 bg-white/60' 
-                            : 'w-1.5 bg-white/20'
-                      }`}
-                    />
-                  ))}
-                </div>
                 <span className="text-white/40 text-xs font-mono animate-pulse">
                   {Math.round(totalProgress)}%
                 </span>
               </div>
+              <span className="text-white/40 text-xs font-mono animate-pulse">
+                {Math.round(totalProgress)}%
+              </span>
             </div>
           </div>
         )}
 
         {/* FINAL */}
         {phase === "final" && (
-          <div className="text-center animate-final-burst">
-            <div className="relative mb-6">
-              <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center shadow-2xl shadow-emerald-500/60 animate-shake mx-auto">
-                <Rocket className="w-18 h-18 md:w-24 md:h-24 text-white -rotate-45 animate-rocket-lift" />
+          <div className="fixed inset-0 flex items-end justify-center pb-20">
+            {/* Rocket container that animates upward with everything */}
+            <div className="relative animate-rocket-launch">
+              {/* Rocket launching from bottom to top */}
+              <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center shadow-2xl shadow-emerald-500/60 mx-auto">
+                <Rocket className="w-18 h-18 md:w-24 md:h-24 text-white -rotate-45" />
               </div>
-              <div className="absolute inset-0 rounded-full border-4 border-white/30 animate-ping" />
-              <div className="absolute -inset-6 rounded-full border-2 border-emerald-400/20 animate-ping" style={{ animationDelay: '0.2s' }} />
-              <div className="absolute -inset-12 rounded-full border border-teal-400/10 animate-ping" style={{ animationDelay: '0.4s' }} />
               
-              {/* Exhaust flames */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                {[...Array(6)].map((_, i) => (
-                  <div 
-                    key={i}
-                    className="rounded-full animate-flame"
-                    style={{
-                      width: 20 - i * 3,
-                      height: 20 - i * 3,
-                      background: `linear-gradient(to bottom, ${i < 2 ? '#fbbf24' : i < 4 ? '#f97316' : '#ef4444'}, transparent)`,
-                      animationDelay: `${i * 0.05}s`,
-                    }}
-                  />
-                ))}
+              {/* Expanding rings */}
+              <div className="absolute inset-0 rounded-full border-4 border-white/30 animate-ping" />
+              <div
+                className="absolute -inset-6 rounded-full border-2 border-emerald-400/20 animate-ping"
+                style={{ animationDelay: "0.2s" }}
+              />
+              <div
+                className="absolute -inset-12 rounded-full border border-teal-400/10 animate-ping"
+                style={{ animationDelay: "0.4s" }}
+              />
+
+              {/* Text moves with rocket */}
+              <div className="absolute top-full mt-8 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+                <h2 className="text-4xl md:text-6xl font-black text-white mb-2 animate-text-shake">
+                  LAUNCHING!
+                </h2>
+                <div className="flex justify-center gap-1.5 mt-4">
+                  {[...Array(7)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 animate-bounce"
+                      style={{ animationDelay: `${i * 0.08}s` }}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-            
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-2 animate-text-shake">
-              LAUNCHING!
-            </h2>
-            <div className="flex justify-center gap-1.5 mt-4">
-              {[...Array(7)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 animate-bounce"
-                  style={{ animationDelay: `${i * 0.08}s` }}
-                />
-              ))}
             </div>
           </div>
         )}
@@ -792,24 +904,16 @@ export default function LaunchPage() {
                 🎉 LAUNCHED! 🎉
               </div>
             </div>
-            
+
             <p className="text-xl md:text-3xl text-emerald-200/90 mb-4 animate-bounce tracking-wide">
               Welcome to Healthy Life Kerala!
             </p>
-            
-            <div className="flex justify-center gap-2 mt-6">
-              {[...Array(11)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-5 h-5 md:w-7 md:h-7 text-yellow-400 animate-star-burst"
-                  style={{ animationDelay: `${i * 0.04}s` }}
-                />
-              ))}
-            </div>
-            
+
             <div className="mt-8 flex items-center justify-center gap-2 text-emerald-300/70">
               <ArrowRight className="w-5 h-5 animate-bounce-x" />
-              <span className="animate-pulse">Entering your health journey...</span>
+              <span className="animate-pulse">
+                Entering your health journey...
+              </span>
             </div>
           </div>
         )}
@@ -823,9 +927,16 @@ export default function LaunchPage() {
         )}
 
         {/* Bottom branding */}
-        <div className={`absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-3 transition-all duration-500 ${
-          phase === "celebration" || phase === "redirect" || phase === "frames" || phase === "final" ? 'opacity-0' : 'opacity-100'
-        }`}>
+        <div
+          className={`absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-3 transition-all duration-500 ${
+            phase === "celebration" ||
+            phase === "redirect" ||
+            phase === "frames" ||
+            phase === "final"
+              ? "opacity-0"
+              : "opacity-100"
+          }`}
+        >
           <Image
             src="/vibe-4-wellness-logo.png"
             alt="Vibe 4 Wellness"
@@ -834,7 +945,14 @@ export default function LaunchPage() {
             className="object-contain opacity-40 animate-float-slow"
           />
           <div className="w-px h-5 bg-white/20" />
-          <span className="text-white/30 text-xs">Government of Kerala</span>
+
+          <Image
+            src="/Kerala-sarkar-Emblem.png"
+            alt="Kerala State Emblem"
+            width={90}
+            height={58}
+            className="object-contain opacity-40 animate-float-slow invert"
+          />
         </div>
       </div>
 
@@ -869,7 +987,8 @@ export default function LaunchPage() {
         @keyframes badge-scale { 0% { transform: scale(0) rotate(-10deg); } 60% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(1) rotate(0deg); } }
         @keyframes final-burst { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
-        @keyframes rocket-lift { 0% { transform: rotate(-45deg) translateY(0); } 100% { transform: rotate(-45deg) translateY(-20px); } }
+        @keyframes rocket-launch { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-120vh) scale(0.5); } }
+        @keyframes exhaust-fade { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
         @keyframes text-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
         @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
         @keyframes highlight-glow { 0% { text-shadow: 0 0 10px rgba(255,255,255,0.5); } 100% { text-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 60px rgba(16,185,129,0.6); } }
@@ -937,7 +1056,8 @@ export default function LaunchPage() {
         .animate-badge-scale { animation: badge-scale 0.4s ease-out both; }
         .animate-final-burst { animation: final-burst 0.4s ease-out forwards; }
         .animate-shake { animation: shake 0.15s ease-in-out infinite; }
-        .animate-rocket-lift { animation: rocket-lift 0.6s ease-out infinite alternate; }
+        .animate-rocket-launch { animation: rocket-launch 1s ease-in forwards; }
+        .animate-exhaust-fade { animation: exhaust-fade 1s ease-out forwards; }
         .animate-text-shake { animation: text-shake 0.1s ease-in-out infinite; }
         .animate-blink { animation: blink 0.5s step-end infinite; }
         .animate-highlight-glow { animation: highlight-glow 0.4s ease-out forwards; }
