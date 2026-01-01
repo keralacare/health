@@ -63,12 +63,12 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                <Heart className="w-5 h-5 text-white" />
+              <div className="">
+                <Image src="/vibe-4-wellness-logo.png" alt="Vibe 4 Wellness Logo" width={28} height={28} className="object-contain" />
               </div>
               <div>
                 <span className="text-xl font-bold tracking-tight text-slate-900">
-                  Healthy Life
+                  Vibe 4 Wellness
                 </span>
                 <p className="text-xs text-slate-500 -mt-0.5">
                   Health & Wellness Tools

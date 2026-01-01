@@ -18,7 +18,7 @@ const inter = Inter({
 
 
 export const metadata: Metadata = {
-  title: "Healthy Life Campaign - Health Risk Assessment",
+  title: "Vibe 4 Wellness - Health Risk Assessment",
   description:
     "Check your health risks in 5 minutes. A free, private health risk assessment tool.",
   metadataBase: new URL("https://health.kerala.care"),
@@ -30,17 +30,17 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
-    title: "Healthy Life Campaign - Health Risk Assessment",
+    title: "Vibe 4 Wellness - Health Risk Assessment",
     description:
       "Check your health risks in 5 minutes. Free, private health risk assessment tool. Eat well · Act well · Sleep well · Care well",
     url: "https://health.kerala.care",
-    siteName: "Healthy Life Campaign",
+    siteName: "Vibe 4 Wellness",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Healthy Life Campaign - Health Risk Assessment",
+    title: "Vibe 4 Wellness - Health Risk Assessment",
     description:
       "Check your health risks in 5 minutes. Free, private health risk assessment tool.",
   },

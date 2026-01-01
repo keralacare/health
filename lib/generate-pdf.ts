@@ -76,7 +76,7 @@ export async function generateHealthPDF({
     doc.setFontSize(8);
     doc.setTextColor(slate400[0], slate400[1], slate400[2]);
     doc.text(
-      `© ${new Date().getFullYear()} Healthy Life`,
+      `© ${new Date().getFullYear()} Vibe 4 Wellness`,
       margin,
       footerY
     );
@@ -127,7 +127,7 @@ export async function generateHealthPDF({
     doc.setTextColor(white[0], white[1], white[2]);
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Healthy Life", margin + 32, 16);
+    doc.text("Vibe 4 Wellness", margin + 32, 16);
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");

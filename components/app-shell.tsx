@@ -44,7 +44,7 @@ export function AppShell({
                 <Heart className="w-4 h-4 text-white" />
               </div>
               <span className="text-lg font-semibold tracking-tight text-slate-900">
-                Healthy Life
+                Vibe 4 Wellness
               </span>
             </Link>
 

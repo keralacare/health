@@ -906,7 +906,7 @@ export default function LaunchPage() {
             </div>
 
             <p className="text-xl md:text-3xl text-emerald-200/90 mb-4 animate-bounce tracking-wide">
-              Welcome to Healthy Life Kerala
+              Welcome to Vibe for Wellness Kerala
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-2 text-emerald-300/70">
