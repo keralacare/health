@@ -192,7 +192,7 @@ export default function LandingPage() {
       </section>
 
       {/* Chief Minister Section */}
-      <section id="cm-legacy-of-compassion">
+      <section id="cm-legacy-of-compassion" className="hidden">
         <div className="bg-white shadow-md rounded-lg max-w-6xl sm:mx-auto mx-2 my-4">
           <div className="container mx-auto p-4 lg:p-0">
             <div className="max-w-6xl mx-auto">
@@ -222,7 +222,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="hm-legacy-of-compassion" className="pt-20">
+      <section id="hm-legacy-of-compassion" className="pt-20 hidden">
         <div className="bg-white shadow-md rounded-lg max-w-6xl sm:mx-auto mx-2 my-4">
           <div className="container mx-auto p-4 lg:p-0">
             <div className="max-w-6xl mx-auto">
