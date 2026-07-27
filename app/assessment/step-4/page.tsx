@@ -246,7 +246,7 @@ export default function Step4Page() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="mt-3 bg-emerald-600 hover:bg-emerald-700 gap-2 w-full">
+                <Button className="mt-3 bg-blue-700 hover:bg-blue-800 gap-2 w-full">
                   <Building2 className="w-4 h-4" />
                   {t("step4_consultation_find_jak")}
                 </Button>
@@ -652,7 +652,7 @@ export default function Step4Page() {
             <DialogTrigger asChild>
               <Button
                 size="lg"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 gap-2"
+                className="w-full bg-blue-700 hover:bg-blue-800 gap-2"
               >
                 <Download className="w-5 h-5" />
                 {t("step4_download_title")}
@@ -705,7 +705,7 @@ export default function Step4Page() {
                 </DialogClose>
                 <DialogClose asChild>
                   <Button
-                    className="bg-emerald-600 hover:bg-emerald-700 gap-2"
+                    className="bg-blue-700 hover:bg-blue-800 gap-2"
                     onClick={handleDownload}
                     disabled={isGenerating}
                   >

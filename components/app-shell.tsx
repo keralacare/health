@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Heart, Shield, FileWarning } from "lucide-react";
+import Image from "next/image";
 import { Footer } from "@/components/footer";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useI18n } from "@/lib/i18n-context";
@@ -34,18 +35,27 @@ export function AppShell({
   const progress = currentStep > 0 ? (currentStep / totalSteps) * 100 : 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.08),_transparent_28%),linear-gradient(180deg,#f7fbff_0%,#ffffff_40%,#f8fafc_100%)]">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-50 w-full border-b border-blue-100/70 bg-white/78 shadow-[0_8px_30px_rgba(15,23,42,0.04)] backdrop-blur-xl">
         <div className="max-w-xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
-                <Heart className="w-4 h-4 text-white" />
+              <Image
+                src="/tn-mtm-logo.png"
+                alt="Makkalai Thedi Maruthuvam Logo"
+                width={34}
+                height={34}
+                className="h-8 w-8"
+              />
+              <div className="leading-tight">
+                <span className="block text-lg font-semibold tracking-tight text-slate-900 ">
+                  {t("app_name")}
+                </span>
+                <span className="block text-[11px] text-slate-500">
+                  {t("app_tagline")}
+                </span>
               </div>
-              <span className="text-lg font-semibold tracking-tight text-slate-900">
-                Vibe 4 Wellness
-              </span>
             </Link>
 
             <div className="flex items-center gap-1">
@@ -56,7 +66,7 @@ export function AppShell({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-slate-600 hover:text-slate-900"
+                    className="text-slate-600 hover:text-slate-900 hover:bg-blue-50"
                   >
                     <Shield className="w-4 h-4 mr-1" />
                     <span className="hidden sm:inline">
@@ -67,7 +77,7 @@ export function AppShell({
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
-                      <Shield className="w-5 h-5 text-emerald-600" />
+                      <Shield className="w-5 h-5 text-blue-700" />
                       {t("privacy_dialog_title")}
                     </DialogTitle>
                   </DialogHeader>
@@ -95,7 +105,7 @@ export function AppShell({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-slate-600 hover:text-slate-900"
+                    className="text-slate-600 hover:text-slate-900 hover:bg-blue-50"
                   >
                     <FileWarning className="w-4 h-4 mr-1" />
                     <span className="hidden sm:inline">
@@ -126,7 +136,7 @@ export function AppShell({
               <div className="flex items-center justify-between">
                 <Badge
                   variant="secondary"
-                  className="bg-slate-100 text-slate-700"
+                  className="bg-blue-50 text-blue-700 border-blue-100"
                 >
                   {t("common_step_of", {
                     current: currentStep.toString(),

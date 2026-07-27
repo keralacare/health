@@ -76,7 +76,7 @@ export async function generateHealthPDF({
     doc.setFontSize(8);
     doc.setTextColor(slate400[0], slate400[1], slate400[2]);
     doc.text(
-      `© ${new Date().getFullYear()} Vibe 4 Wellness`,
+      `© ${new Date().getFullYear()} Makkalai Thedi Maruthuvam`,
       margin,
       footerY
     );
@@ -85,15 +85,15 @@ export async function generateHealthPDF({
     doc.text(pageText, pageWidth / 2 - doc.getTextWidth(pageText) / 2, footerY);
 
     doc.text(
-      "health.kerala.care",
-      pageWidth - margin - doc.getTextWidth("health.kerala.care"),
+      "health.tn.gov.in",
+      pageWidth - margin - doc.getTextWidth("health.tn.gov.in"),
       footerY
     );
   };
 
   const addLogoIcon = async (x: number, y: number, size: number) => {
     try {
-      const iconPath = "/vibe-4-wellness-logo.png";
+      const iconPath = "/tn-government-logo.webp";
       const img = await fetch(iconPath);
       const blob = await img.blob();
       const reader = new FileReader();
@@ -127,11 +127,11 @@ export async function generateHealthPDF({
     doc.setTextColor(white[0], white[1], white[2]);
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Vibe 4 Wellness", margin + 32, 16);
+    doc.text("Makkalai Thedi Maruthuvam", margin + 32, 16);
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("Health Risk Assessment Summary", margin + 32, 24);
+    doc.text("NCD Cascade Care Summary", margin + 32, 24);
 
     // Date
     const date = new Date().toLocaleDateString("en-IN", {

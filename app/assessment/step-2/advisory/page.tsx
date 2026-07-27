@@ -135,7 +135,7 @@ It does not provide treatment advice.
         {/* Actions */}
         <div className="space-y-3">
           <Button
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2"
+            className="w-full bg-blue-700 hover:bg-blue-800 text-white gap-2"
             size="lg"
             asChild
           >

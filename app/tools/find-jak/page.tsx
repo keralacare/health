@@ -20,10 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Slider } from "@/components/ui/slider";
 import { Footer } from "@/components/footer";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useI18n } from "@/lib/i18n-context";
@@ -54,7 +53,6 @@ import {
   filterJAKEntries,
   getJAKDisplayName,
   getGoogleMapsUrl,
-  hasValidCoordinates,
   findNearbyJAKs,
   formatDistance,
   JAKWithDistance,
@@ -62,24 +60,6 @@ import {
 
 // Type the imported data
 const jakData: JAKEntry[] = jakDataRaw as JAKEntry[];
-
-// Kerala districts for the dropdown
-const KERALA_DISTRICTS = [
-  "Thiruvananthapuram",
-  "Kollam",
-  "Pathanamthitta",
-  "Alappuzha",
-  "Kottayam",
-  "Idukki",
-  "Ernakulam",
-  "Thrissur",
-  "Palakkad",
-  "Malappuram",
-  "Kozhikode",
-  "Wayanad",
-  "Kannur",
-  "Kasaragod",
-];
 
 // JAK Result Card Component
 function JAKResultCard({
@@ -114,7 +94,7 @@ function JAKResultCard({
               {jak.jakCode && (
                 <Badge
                   variant="secondary"
-                  className="bg-teal-50 text-teal-700 text-xs"
+                  className="bg-blue-50 text-blue-700 text-xs"
                 >
                   {jak.jakCode}
                 </Badge>
@@ -132,9 +112,9 @@ function JAKResultCard({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {hasValidCoordinates(jak) && (
-              <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-teal-600" />
+            {mapsUrl && (
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-blue-600" />
               </div>
             )}
             {expanded ? (
@@ -175,7 +155,7 @@ function JAKResultCard({
                 <p className="text-xs text-slate-500">Email</p>
                 <a
                   href={`mailto:${jak.email}`}
-                  className="text-sm text-teal-600 hover:underline break-all"
+                  className="text-sm text-blue-600 hover:underline break-all"
                 >
                   {jak.email}
                 </a>
@@ -193,12 +173,27 @@ function JAKResultCard({
             </div>
           )}
 
+          {(jak.phone || jak.landline) && (
+            <div className="flex items-start gap-2">
+              <Phone className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-xs text-slate-500">Contact</p>
+                {jak.phone && (
+                  <p className="text-sm text-slate-700">+91 {jak.phone}</p>
+                )}
+                {jak.landline && (
+                  <p className="text-sm text-slate-700">{jak.landline}</p>
+                )}
+              </div>
+            </div>
+          )}
+
           {mapsUrl && (
             <a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 w-full p-2 bg-teal-50 rounded-lg text-teal-700 hover:bg-teal-100 transition-colors"
+              className="flex items-center gap-2 w-full p-2 bg-blue-50 rounded-lg text-blue-700 hover:bg-blue-100 transition-colors"
             >
               <Navigation className="w-4 h-4" />
               <span className="text-sm font-medium">
@@ -219,38 +214,22 @@ export default function FindJAKPage() {
   );
   const [district, setDistrict] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
+  const [searchRadius, setSearchRadius] = useState<number>(25);
   const [userLocation, setUserLocation] = useState<{
-    lat: number;
-    lon: number;
+    latitude: number;
+    longitude: number;
   } | null>(null);
-  const [locationLoading, setLocationLoading] = useState(false);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
-  const [searchRadius, setSearchRadius] = useState<number>(25); // Default 25km
+  const [hasSearched, setHasSearched] = useState(false);
   const { t } = useI18n();
 
   // Filter results based on search criteria
   const searchResults = useMemo(() => {
     if (!hasSearched) return [];
 
-    if (searchMode === "location" && userLocation) {
-      return findNearbyJAKs(
-        jakData,
-        userLocation.lat,
-        userLocation.lon,
-        searchRadius
-      );
-    } else {
-      return filterJAKEntries(jakData, district, searchQuery);
-    }
-  }, [
-    district,
-    searchQuery,
-    hasSearched,
-    searchMode,
-    userLocation,
-    searchRadius,
-  ]);
+    return filterJAKEntries(jakData, district, searchQuery);
+  }, [district, searchQuery, hasSearched]);
 
   // Get count by district for display
   const districtCounts = useMemo(() => {
@@ -262,64 +241,78 @@ export default function FindJAKPage() {
     return counts;
   }, []);
 
-  const requestLocation = () => {
-    if (!navigator.geolocation) {
-      setLocationError(t("tool_jak_location_error"));
-      return;
-    }
+  const availableDistricts = useMemo(
+    () => Object.keys(districtCounts).sort((a, b) => a.localeCompare(b)),
+    [districtCounts]
+  );
 
-    setLocationLoading(true);
-    setLocationError(null);
+  const nearbyResults = useMemo(() => {
+    if (!hasSearched || searchMode !== "location" || !userLocation) return [];
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
-        });
-        setSearchMode("location");
-        setLocationLoading(false);
-        setHasSearched(true);
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-        setLocationError(t("tool_jak_location_error"));
-        setLocationLoading(false);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
+    return findNearbyJAKs(
+      jakData,
+      userLocation.latitude,
+      userLocation.longitude,
+      searchRadius
     );
-  };
+  }, [hasSearched, searchMode, userLocation, searchRadius]);
 
   const handleSearch = () => {
-    setSearchMode("district");
-    setUserLocation(null);
-    setLocationError(null);
+    if (searchMode === "location" && !userLocation) {
+      setLocationError(t("tool_jak_location_error_desc"));
+      return;
+    }
     setHasSearched(true);
   };
 
   const handleClearSearch = () => {
     setDistrict("");
     setSearchQuery("");
-    setHasSearched(false);
-    setSearchMode("district");
-    setUserLocation(null);
     setLocationError(null);
+    setUserLocation(null);
+    setHasSearched(false);
+  };
+
+  const handleUseLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError(t("tool_jak_location_error_desc"));
+      return;
+    }
+
+    setIsGettingLocation(true);
+    setLocationError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        setHasSearched(true);
+        setIsGettingLocation(false);
+      },
+      () => {
+        setLocationError(t("tool_jak_location_error_desc"));
+        setIsGettingLocation(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 300000,
+      }
+    );
   };
 
   const hasData = jakData.length > 0;
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-teal-50 via-white to-slate-50">
+    <div className="min-h-screen bg-linear-to-b from-blue-50 via-white to-slate-50">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-linear-to-b from-emerald-500 to-teal-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-linear-to-b from-blue-600 to-indigo-700 flex items-center justify-center">
                 <Heart className="w-4 h-4 text-white" />
               </div>
               <span className="text-lg font-bold tracking-tight text-slate-900">
@@ -329,7 +322,7 @@ export default function FindJAKPage() {
             <div className="flex items-center gap-2">
               <Badge
                 variant="secondary"
-                className="bg-teal-100 text-teal-700 border-teal-200"
+                className="bg-blue-100 text-blue-700 border-blue-200"
               >
                 <Building2 className="w-3 h-3 mr-1" />
                 {t("tool_jak_badge")}
@@ -352,7 +345,7 @@ export default function FindJAKPage() {
         <div className="space-y-6">
           {/* Hero */}
           <div className="text-center">
-            <div className="w-16 h-16 rounded-2xl bg-linear-to-b from-teal-500 to-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-teal-500/30">
+            <div className="w-16 h-16 rounded-2xl bg-linear-to-b from-blue-600 to-indigo-700 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30">
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">
@@ -360,8 +353,8 @@ export default function FindJAKPage() {
             </h1>
             <p className="text-slate-600">{t("tool_jak_subtitle")}</p>
             {hasData && (
-              <p className="text-sm text-teal-600 mt-2 font-medium">
-                {jakData.length - 1} JAKs available across Kerala
+              <p className="text-sm text-blue-600 mt-2 font-medium">
+                {jakData.length} PHCs available across Tamil Nadu
               </p>
             )}
           </div>
@@ -370,7 +363,7 @@ export default function FindJAKPage() {
           <Card className="bg-white border-slate-200 shadow-lg">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Info className="w-5 h-5 text-teal-600" />
+                <Info className="w-5 h-5 text-blue-600" />
                 {t("tool_jak_what_is_title")}
               </CardTitle>
             </CardHeader>
@@ -404,7 +397,7 @@ export default function FindJAKPage() {
                     key={i}
                     className="flex items-center gap-2 p-2 rounded-lg bg-slate-50"
                   >
-                    <item.icon className="w-4 h-4 text-teal-600" />
+                    <item.icon className="w-4 h-4 text-blue-600" />
                     <span className="text-sm text-slate-700">{item.text}</span>
                   </div>
                 ))}
@@ -415,7 +408,7 @@ export default function FindJAKPage() {
           <Card className="bg-white border-slate-200 shadow-lg">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Search className="w-5 h-5 text-teal-600" />
+                <Search className="w-5 h-5 text-blue-600" />
                 {t("tool_jak_search_title")}
               </CardTitle>
               <CardDescription>
@@ -423,54 +416,82 @@ export default function FindJAKPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {locationError && (
-                <Alert className="bg-red-50 border-red-200">
-                  <Info className="h-4 w-4 text-red-600" />
-                  <AlertTitle className="text-red-800 font-semibold">
-                    {t("tool_jak_location_error")}
-                  </AlertTitle>
-                  <AlertDescription className="text-red-700">
-                    {t("tool_jak_location_error_desc")}
-                  </AlertDescription>
-                </Alert>
-              )}
-
               <Tabs
                 value={searchMode}
                 onValueChange={(value) => {
-                  setSearchMode(value as "district" | "location");
-                  if (value === "district") {
-                    setUserLocation(null);
+                  const mode = value as "district" | "location";
+                  setSearchMode(mode);
+                  if (mode === "location") {
+                    setDistrict("");
+                  } else {
                     setLocationError(null);
                   }
-                  setHasSearched(false);
                 }}
-                className="w-full"
               >
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger
-                    value="location"
-                    className="gap-1.5 text-xs sm:text-sm"
-                  >
-                    <Navigation className="w-4 h-4 shrink-0" />
-                    <span className="truncate">
-                      {t("tool_jak_search_mode_location")}
-                    </span>
+                  <TabsTrigger value="location">
+                    {t("tool_jak_search_mode_location")}
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="district"
-                    className="gap-1.5 text-xs sm:text-sm"
-                  >
-                    <Search className="w-4 h-4 shrink-0" />
-                    <span className="truncate">
-                      {t("tool_jak_search_mode_district")}
-                    </span>
+                  <TabsTrigger value="district">
+                    {t("tool_jak_search_mode_district")}
                   </TabsTrigger>
                 </TabsList>
-              </Tabs>
 
-              {searchMode === "district" && (
-                <>
+                <TabsContent value="location" className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <Label>{t("tool_jak_search_radius")}</Label>
+                    <Select
+                      value={String(searchRadius)}
+                      onValueChange={(value) => setSearchRadius(Number(value))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t("tool_jak_adjust_radius")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[5, 10, 15, 25, 50].map((radius) => (
+                          <SelectItem key={radius} value={String(radius)}>
+                            {radius} km
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button
+                    type="button"
+                    onClick={handleUseLocation}
+                    variant="outline"
+                    className="w-full border-slate-300"
+                    disabled={isGettingLocation}
+                  >
+                    <MapPin className="w-4 h-4 mr-2" />
+                    {isGettingLocation
+                      ? t("tool_jak_finding_location")
+                      : t("tool_jak_use_location")}
+                  </Button>
+
+                  {locationError && (
+                    <Alert className="bg-red-50 border-red-200">
+                      <Info className="h-4 w-4 text-red-600" />
+                      <AlertTitle className="text-red-800 font-semibold">
+                        {t("tool_jak_location_error")}
+                      </AlertTitle>
+                      <AlertDescription className="text-red-700">
+                        {locationError}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  {userLocation && (
+                    <p className="text-xs text-slate-600">
+                      {t("tool_jak_within_radius", { radius: searchRadius })}
+                    </p>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="district" className="space-y-4 mt-4">
                   <div className="space-y-2">
                     <Label>{t("tool_jak_select_district")}</Label>
                     <Select value={district} onValueChange={setDistrict}>
@@ -480,7 +501,7 @@ export default function FindJAKPage() {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {KERALA_DISTRICTS.map((d) => (
+                        {availableDistricts.map((d) => (
                           <SelectItem key={d} value={d.toLowerCase()}>
                             {d}
                             {hasData && districtCounts[d] && (
@@ -509,102 +530,29 @@ export default function FindJAKPage() {
                       }}
                     />
                   </div>
+                </TabsContent>
+              </Tabs>
 
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleSearch}
-                      className="flex-1 bg-teal-600 hover:bg-teal-700 gap-2"
-                      disabled={!hasData || !district}
-                    >
-                      <Search className="w-4 h-4" />
-                      {t("common_search")}
-                    </Button>
-                    {hasSearched && (
-                      <Button
-                        onClick={handleClearSearch}
-                        variant="outline"
-                        className="border-slate-300"
-                      >
-                        {t("tool_jak_clear")}
-                      </Button>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {searchMode === "location" && (
-                <div className="space-y-4">
-                  <div className="space-y-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium text-slate-700">
-                        {t("tool_jak_search_radius")}
-                      </Label>
-                      <Badge
-                        variant="secondary"
-                        className="bg-teal-100 text-teal-700 font-semibold"
-                      >
-                        {searchRadius}km
-                      </Badge>
-                    </div>
-                    <Slider
-                      value={[searchRadius]}
-                      onValueChange={(value) => setSearchRadius(value[0])}
-                      min={5}
-                      max={100}
-                      step={5}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between text-xs text-slate-500">
-                      <span>5km</span>
-                      <span className="text-slate-600">
-                        {t("tool_jak_adjust_radius")}
-                      </span>
-                      <span>100km</span>
-                    </div>
-                  </div>
-
-                  {!userLocation ? (
-                    <Button
-                      onClick={requestLocation}
-                      disabled={locationLoading || !hasData}
-                      className="w-full bg-teal-600 hover:bg-teal-700 gap-2"
-                    >
-                      {locationLoading ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          {t("tool_jak_finding_location")}
-                        </>
-                      ) : (
-                        <>
-                          <Navigation className="w-4 h-4" />
-                          {t("tool_jak_use_location")}
-                        </>
-                      )}
-                    </Button>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="p-3 bg-teal-50 rounded-lg border border-teal-200">
-                        <p className="text-sm text-teal-800 font-medium flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          {t("tool_jak_nearby_results")}
-                        </p>
-                        <p className="text-xs text-teal-600 mt-1">
-                          {t("tool_jak_within_radius", {
-                            radius: searchRadius,
-                          })}
-                        </p>
-                      </div>
-                      <Button
-                        onClick={handleClearSearch}
-                        variant="outline"
-                        className="w-full border-slate-300"
-                      >
-                        {t("tool_jak_clear")}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
+              <div className="flex gap-2">
+                {searchMode === "district" && (
+                  <Button
+                    onClick={handleSearch}
+                    className="flex-1 bg-blue-700 hover:bg-blue-800 gap-2"
+                  >
+                    <Search className="w-4 h-4" />
+                    {t("common_search")}
+                  </Button>
+                )}
+                {hasSearched && (
+                  <Button
+                    onClick={handleClearSearch}
+                    variant="outline"
+                    className="border-slate-300"
+                  >
+                    {t("tool_jak_clear")}
+                  </Button>
+                )}
+              </div>
 
               {hasSearched && hasData && (
                 <>
@@ -612,17 +560,25 @@ export default function FindJAKPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-base font-semibold text-slate-900">
-                        {t("tool_jak_results_title")}
+                        {searchMode === "location"
+                          ? t("tool_jak_nearby_results")
+                          : t("tool_jak_results_title")}
                       </h3>
                       <Badge
                         variant="secondary"
-                        className="bg-teal-50 text-teal-700"
+                        className="bg-blue-50 text-blue-700"
                       >
-                        {searchResults.length} {t("tool_jak_results_found")}
+                        {(searchMode === "location"
+                          ? nearbyResults.length
+                          : searchResults.length) +
+                          " " +
+                          t("tool_jak_results_found")}
                       </Badge>
                     </div>
 
-                    {searchResults.length === 0 ? (
+                    {(searchMode === "location"
+                      ? nearbyResults.length
+                      : searchResults.length) === 0 ? (
                       <div className="text-center py-8">
                         <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
                           <Search className="w-6 h-6 text-slate-400" />
@@ -637,14 +593,21 @@ export default function FindJAKPage() {
                     ) : (
                       <div className="h-[50vh] max-h-125 overflow-y-auto -mx-6 px-6">
                         <div className="space-y-3">
-                          {searchResults.slice(0, 100).map((jak) => (
-                            <JAKResultCard
-                              key={jak.id}
-                              jak={jak}
-                              showDistance={searchMode === "location"}
-                            />
-                          ))}
-                          {searchResults.length > 100 && (
+                          {(searchMode === "location"
+                            ? nearbyResults
+                            : searchResults
+                          )
+                            .slice(0, 100)
+                            .map((jak) => (
+                              <JAKResultCard
+                                key={jak.id}
+                                jak={jak}
+                                showDistance={searchMode === "location"}
+                              />
+                            ))}
+                          {(searchMode === "location"
+                            ? nearbyResults.length
+                            : searchResults.length) > 100 && (
                             <p className="text-center text-sm text-slate-500 py-3 bg-slate-50 rounded-lg border border-slate-200">
                               {t("tool_jak_results_limit")}
                             </p>
@@ -667,8 +630,8 @@ export default function FindJAKPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
-                <div className="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center shrink-0">
-                  <Phone className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <Phone className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-900">
@@ -681,8 +644,8 @@ export default function FindJAKPage() {
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
-                <div className="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center shrink-0">
-                  <Users className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <Users className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-900">
@@ -695,8 +658,8 @@ export default function FindJAKPage() {
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
-                <div className="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center shrink-0">
-                  <Navigation className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <Navigation className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-900">
@@ -714,7 +677,7 @@ export default function FindJAKPage() {
           <Card className="bg-white border-slate-200 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Clock className="w-5 h-5 text-teal-600" />
+                <Clock className="w-5 h-5 text-blue-600" />
                 {t("tool_jak_hours_title")}
               </CardTitle>
             </CardHeader>
@@ -752,9 +715,9 @@ export default function FindJAKPage() {
           </Card>
 
           {/* What to Bring */}
-          <Card className="bg-teal-50 border-teal-200">
+          <Card className="bg-blue-50 border-blue-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold text-teal-900">
+              <CardTitle className="text-base font-semibold text-blue-900">
                 {t("tool_jak_bring_title")}
               </CardTitle>
             </CardHeader>
@@ -768,9 +731,9 @@ export default function FindJAKPage() {
                 ].map((item, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-2 text-sm text-teal-800"
+                    className="flex items-start gap-2 text-sm text-blue-800"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -781,21 +744,21 @@ export default function FindJAKPage() {
           <Separator />
 
           {/* Full Assessment CTA */}
-          <Card className="bg-linear-to-b from-emerald-500 to-teal-600 border-0 text-white">
+          <Card className="bg-linear-to-b from-blue-700 to-indigo-800 border-0 text-white">
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <h3 className="text-xl font-semibold">
                   {t("tool_jak_cta_title")}
                 </h3>
-                <p className="text-emerald-100 text-sm">
+                <p className="text-blue-100 text-sm">
                   {t("tool_jak_cta_description")}
                 </p>
                 <Link href="/assessment/step-1">
                   <Button
                     variant="secondary"
-                    className="bg-white text-emerald-700 hover:bg-emerald-50 gap-2"
+                    className="bg-white text-blue-700 hover:bg-blue-50 gap-2"
                   >
-                    {t("tool_jak_cta_Button")}
+                    {t("tool_jak_cta_button")}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>

@@ -11,22 +11,22 @@ import React, {
 
 // Import locale files
 import en from "@/locales/en.json";
-import ml from "@/locales/ml.json";
+import ta from "@/locales/ta.json";
 
 // Types
-export type Locale = "en" | "ml";
+export type Locale = "en" | "ta";
 
 type TranslationKeys = keyof typeof en;
 type Translations = Record<string, string>;
 
 const locales: Record<Locale, Translations> = {
   en,
-  ml,
+  ta,
 };
 
 export const localeNames: Record<Locale, string> = {
   en: "English",
-  ml: "മലയാളം",
+  ta: "தமிழ்",
 };
 
 interface I18nContextType {
@@ -51,7 +51,7 @@ function useLocalStorageLocale(): Locale {
 
   const getSnapshot = useCallback((): Locale => {
     const saved = localStorage.getItem(STORAGE_KEY) as Locale | null;
-    if (saved && (saved === "en" || saved === "ml")) {
+    if (saved && (saved === "en" || saved === "ta")) {
       return saved;
     }
     return "en";

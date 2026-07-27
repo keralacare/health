@@ -15,13 +15,16 @@ export interface JAKEntry {
   longitude: number | null;
   lsgiCode: string;
   constituency: string;
+  phone?: string;
+  landline?: string;
+  locationUrl?: string;
 }
 
 /**
  * Get display name for a JAK entry
  */
 export function getJAKDisplayName(jak: JAKEntry): string {
-  return jak.jakName || jak.institutionName || `JAK ${jak.jakCode}`;
+  return jak.jakName || jak.institutionName || `PHC ${jak.jakCode}`;
 }
 
 /**
@@ -40,6 +43,9 @@ export function hasValidCoordinates(jak: JAKEntry): boolean {
  * Generate Google Maps URL for a JAK location
  */
 export function getGoogleMapsUrl(jak: JAKEntry): string | null {
+  if (jak.locationUrl && jak.locationUrl.trim()) {
+    return jak.locationUrl;
+  }
   if (!hasValidCoordinates(jak)) return null;
   return `https://www.google.com/maps/search/?api=1&query=${jak.latitude},${jak.longitude}`;
 }

@@ -1,0 +1,32 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="48" y1="28" x2="208" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123B7A"/>
+      <stop offset="1" stop-color="#07162F"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="40" y1="32" x2="216" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7B432"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="88" y1="128" x2="176" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#D7E9FF"/>
+    </linearGradient>
+    <filter id="shadow" x="24" y="24" width="208" height="208" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#07162F" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <circle cx="128" cy="128" r="112" fill="url(#bg)" filter="url(#shadow)"/>
+  <circle cx="128" cy="128" r="96" stroke="url(#ring)" stroke-width="8" opacity="0.95"/>
+  <circle cx="128" cy="128" r="74" fill="#F8FAFC" opacity="0.08"/>
+  <path d="M77 90C96 68 159 68 179 90" stroke="#F7B432" stroke-width="10" stroke-linecap="round"/>
+  <path d="M84 166C99 176 117 182 128 182C139 182 157 176 172 166" stroke="#2DD4BF" stroke-width="10" stroke-linecap="round"/>
+  <rect x="102" y="84" width="52" height="88" rx="18" fill="#FFFFFF"/>
+  <rect x="84" y="102" width="88" height="52" rx="18" fill="#FFFFFF"/>
+  <rect x="120" y="66" width="16" height="124" rx="8" fill="#123B7A"/>
+  <rect x="66" y="120" width="124" height="16" rx="8" fill="#123B7A"/>
+  <path d="M60 64L68 72M52 88L64 88M60 112L68 104M64 192L72 184" stroke="#F7B432" stroke-width="6" stroke-linecap="round"/>
+  <path d="M196 64L188 72M204 88L192 88M196 112L188 104M192 192L184 184" stroke="#F7B432" stroke-width="6" stroke-linecap="round"/>
+  <path d="M92 206C104 194 116 188 128 188C140 188 152 194 164 206" stroke="url(#pulse)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="128" cy="52" r="8" fill="#F7B432"/>
+</svg>

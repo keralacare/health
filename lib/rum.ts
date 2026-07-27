@@ -9,7 +9,7 @@ export const recordEvent = (name: string, attributes?: { [key: string]: string |
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
-        event: `kk:${name}`, 
+        event: `tn:${name}`, 
       }),
   }).catch(() => {}); // Fire and forget
 };

@@ -41,7 +41,7 @@ export default function UHIDRegistrationPage() {
 
   const handleRedirect = () => {
     window.open(
-      "https://ehealth.kerala.gov.in/portal/",
+      "https://abha.abdm.gov.in/abha/v3/register",
       "_blank",
       "noopener,noreferrer"
     );
@@ -54,7 +54,7 @@ export default function UHIDRegistrationPage() {
         <div className="max-w-xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
                 <Heart className="w-4 h-4 text-white" />
               </div>
               <span className="text-lg font-bold tracking-tight text-slate-900">
@@ -187,12 +187,12 @@ export default function UHIDRegistrationPage() {
           </Button>
 
           {/* Already have UHID */}
-          <Alert className="bg-emerald-50 border-emerald-200">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-            <AlertTitle className="text-emerald-800 font-semibold">
+          <Alert className="bg-blue-50 border-blue-200">
+            <CheckCircle2 className="h-4 w-4 text-blue-600" />
+            <AlertTitle className="text-blue-800 font-semibold">
               {t("tool_uhid_already_have_title")}
             </AlertTitle>
-            <AlertDescription className="text-emerald-700">
+            <AlertDescription className="text-blue-700">
               {t("tool_uhid_already_have_description")}
             </AlertDescription>
           </Alert>

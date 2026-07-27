@@ -4,11 +4,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { AssessmentProvider } from "@/lib/assessment-context";
 import { I18nProvider } from "@/lib/i18n-context";
 import { RumInit } from "@/components/analytics/rum-init";
-import { Anek_Malayalam, Inter } from "next/font/google";
+import { Noto_Sans_Tamil, Inter } from "next/font/google";
 
-const anekMalayalam = Anek_Malayalam({
-  subsets: ["latin"],
-  variable: "--font-anek-malayalam",
+const notoSansTamil = Noto_Sans_Tamil({
+  subsets: ["tamil"],
+  variable: "--font-noto-sans-tamil",
+  weight: ["400", "500", "600", "700"],
 });
 
 const inter = Inter({
@@ -16,12 +17,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-
 export const metadata: Metadata = {
-  title: "Vibe 4 Wellness - Health Risk Assessment",
+  title: "Makkalai Thedi Maruthuvam - NCD Cascade Care",
   description:
-    "Check your health risks in 5 minutes. A free, private health risk assessment tool.",
-  metadataBase: new URL("https://health.kerala.care"),
+    "Evaluation of Non-Communicable Disease Cascade Care under Makkalai Thedi Maruthuvam in Tamil Nadu.",
+  metadataBase: new URL("https://health.tn.gov.in"),
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -30,27 +30,28 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
-    title: "Vibe 4 Wellness - Health Risk Assessment",
+    title: "Makkalai Thedi Maruthuvam - NCD Cascade Care",
     description:
-      "Check your health risks in 5 minutes. Free, private health risk assessment tool. Eat well · Act well · Sleep well · Care well",
-    url: "https://health.kerala.care",
-    siteName: "Vibe 4 Wellness",
-    locale: "en_US",
+      "A cross-sectional study on Non-Communicable Disease Cascade Care under Makkalai Thedi Maruthuvam in Tamil Nadu.",
+    url: "https://health.tn.gov.in",
+    siteName: "Makkalai Thedi Maruthuvam",
+    locale: "ta_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vibe 4 Wellness - Health Risk Assessment",
+    title: "Makkalai Thedi Maruthuvam - NCD Cascade Care",
     description:
-      "Check your health risks in 5 minutes. Free, private health risk assessment tool.",
+      "Evaluation of NCD Cascade Care under Makkalai Thedi Maruthuvam in Tamil Nadu.",
   },
   keywords: [
     "health assessment",
     "health risk",
-    "Kerala health",
+    "Tamil Nadu health",
     "preventive healthcare",
     "wellness check",
     "health screening",
+    "tamilnadu health",
   ],
 };
 
@@ -60,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${inter.variable} ${anekMalayalam.variable}`}>
+    <html className={`${inter.variable} ${notoSansTamil.variable}`}>
       <body className={`antialiased min-h-screen bg-slate-50`}>
         <RumInit />
         <I18nProvider>

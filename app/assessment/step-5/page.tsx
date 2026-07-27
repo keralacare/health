@@ -313,7 +313,7 @@ export default function Step5Page() {
           </Link>
           <Button
             onClick={handleNext}
-            className="gap-1 bg-emerald-600 hover:bg-emerald-700"
+            className="gap-1 bg-blue-700 hover:bg-blue-800"
           >
             {t("common_view_summary")}
             <ChevronRight className="w-4 h-4" />

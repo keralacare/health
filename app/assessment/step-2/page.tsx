@@ -513,7 +513,7 @@ export default function Step2Page() {
           </Link>
           <Button
             onClick={handleNext}
-            className="gap-1 bg-emerald-600 hover:bg-emerald-700"
+            className="gap-1 bg-blue-700 hover:bg-blue-800"
             disabled={!height || !weight}
           >
             {t("common_next")}
